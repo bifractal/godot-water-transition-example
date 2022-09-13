@@ -11,7 +11,7 @@ uniform sampler2D underwater_refraction_noise;
 
 // Masks
 uniform sampler2D water_transition_mask;
-//uniform sampler2D water_depth_mask;
+uniform sampler2D water_depth_mask;
 
 /**
  * Generate Water Line
@@ -37,7 +37,6 @@ vec3 generate_water_line(vec2 screen_uv, float time,
 	return water_line_color.rgb * line;
 }
 
-
 /**
  * Fragment Shader
  */
@@ -46,8 +45,7 @@ void fragment()
 	// --> Masks
 	float water_transition_value = textureLod(water_transition_mask, SCREEN_UV, 0.0f).r;
 	float water_surface_mask = ceil(water_transition_value);
-
-	// TODO Underwater depth mask.
+	float water_depth_value = textureLod(water_depth_mask, SCREEN_UV, underwater_blur_lod).r;
 	
 	// --> Water Line
 	float water_line_thickness = 0.24f;
@@ -80,6 +78,7 @@ void fragment()
 	color *= pow(1.0f - water_line.r, 40.0f);
 	color += water_line;
 	color *= underwater_color.rgb * (bottom_mask * 2.0f);
+	color *= clamp((1.0f - water_depth_value) * 0.8f, 0.25f, 1.0f) * bottom_mask;
 	
 	COLOR.rgb = overwater_color + color;
 }

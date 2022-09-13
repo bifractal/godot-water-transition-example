@@ -4,9 +4,14 @@
 extends KinematicBody
 
 onready var camera : Camera = $Camera
+
 onready var water_tp_viewport : Viewport = $WaterTransitionPass_Viewport
 onready var water_tp_camera : Camera = $WaterTransitionPass_Viewport/WaterTransitionPass_Camera
 onready var water_tp_rt : MeshInstance = $WaterTransitionPass_Viewport/WaterTransitionPass_Camera/WaterTransitionPass_RT
+
+onready var water_dp_viewport : Viewport = $WaterDepthPass_Viewport
+onready var water_dp_camera : Camera = $WaterDepthPass_Viewport/WaterDepthPass_Camera
+onready var water_dp_rt : MeshInstance = $WaterDepthPass_Viewport/WaterDepthPass_Camera/WaterDepthPass_RT
 
 export var water_level = 0.0
 export var water_level_cam_threshold = 1.0
@@ -55,6 +60,12 @@ func is_near_water():
 func get_water_transition_mask():
 	return water_tp_viewport.get_texture()
 
+# Get Water Depth Mask
+func get_water_depth_mask():
+	var t = water_dp_viewport.get_texture()
+	t.flags = Texture.FLAG_FILTER | Texture.FLAG_MIPMAPS
+	return t
+
 # Apply Movement
 func _apply_movement(delta):
 	var forward_vec = -transform.basis.z
@@ -97,10 +108,14 @@ func _apply_render_passes():
 		# Water Transition Pass
 		water_tp_camera.visible = true
 		water_tp_rt.visible = true
-		water_tp_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
-		water_tp_viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 		
-		_apply_water_transition_pass();
+		_apply_water_transition_pass()
+	
+		# Water Depth Pass
+		water_dp_camera.visible = true
+		water_dp_rt.visible = true
+		
+		_apply_water_depth_pass()
 	
 	# Skip
 	else:
@@ -108,8 +123,10 @@ func _apply_render_passes():
 		# Water Transition Pass
 		water_tp_camera.visible = false
 		water_tp_rt.visible = false
-		water_tp_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
-		water_tp_viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
+		
+		# Water Depth Pass
+		water_dp_camera.visible = false
+		water_dp_rt.visible = false
 
 # Apply Water Transition Pass
 func _apply_water_transition_pass():
@@ -129,3 +146,14 @@ func _apply_water_transition_pass():
 	water_pp_mat.set_shader_param("camera_near", camera.near)
 	water_pp_mat.set_shader_param("camera_position", camera_position)
 	water_pp_mat.set_shader_param("camera_direction_vector", camera_direction_vector)
+
+# Apply Water Depth Pass
+func _apply_water_depth_pass():
+	water_dp_viewport.size = camera.get_viewport().size * 0.125 # LOD 3 ?
+	
+	water_dp_camera.fov = camera.fov
+	water_dp_camera.near = camera.near
+	water_dp_camera.far = camera.far
+	water_dp_camera.global_transform = camera.global_transform
+	
+	water_dp_rt.translation.z = -(camera.near + 0.001)

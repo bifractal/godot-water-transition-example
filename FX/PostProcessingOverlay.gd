@@ -29,3 +29,4 @@ func _process(_delta):
 	# Apply Shader Params
 	var shader_material = material as ShaderMaterial
 	shader_material.set_shader_param("water_transition_mask", player.get_water_transition_mask())
+	shader_material.set_shader_param("water_depth_mask", player.get_water_depth_mask())
