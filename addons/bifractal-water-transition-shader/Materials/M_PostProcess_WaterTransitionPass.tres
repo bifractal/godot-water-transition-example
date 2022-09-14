@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=2]
 
-[ext_resource path="res://Materials/SHD_PostProcess_WaterTransitionPass.gdshader" type="Shader" id=1]
+[ext_resource path="res://addons/bifractal-water-transition-shader/materials/SHD_PostProcess_WaterTransitionPass.gdshader" type="Shader" id=1]
 
 [resource]
 shader = ExtResource( 1 )

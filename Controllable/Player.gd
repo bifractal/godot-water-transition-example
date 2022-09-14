@@ -4,9 +4,7 @@
 extends KinematicBody
 
 onready var camera : Camera = $Camera
-onready var water_tp_viewport : Viewport = $WaterTransitionPass_Viewport
-onready var water_tp_camera : Camera = $WaterTransitionPass_Viewport/WaterTransitionPass_Camera
-onready var water_tp_rt : MeshInstance = $WaterTransitionPass_Viewport/WaterTransitionPass_Camera/WaterTransitionPass_RT
+onready var water_transition_shader : Spatial = $WaterTransitionShader
 
 export var water_level = 0.0
 export var water_level_cam_threshold = 1.0
@@ -19,7 +17,7 @@ var movement_velocity = Vector3(0.0, 0.0, 0.0)
 # Ready
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
+
 # Input
 func _input(event):
 	
@@ -40,8 +38,8 @@ func _input(event):
 		camera.set_rotation_degrees(cam_rot);
 
 # Process
-func _process(_delta):
-	_apply_render_passes()
+func _process(delta):
+	water_transition_shader.update_main_camera(camera)
 
 # Physics Process
 func _physics_process(delta):
@@ -50,10 +48,6 @@ func _physics_process(delta):
 # Is Near Water?
 func is_near_water():
 	return global_translation.y < water_level + water_level_cam_threshold
-
-# Get Water Transition Mask
-func get_water_transition_mask():
-	return water_tp_viewport.get_texture()
 
 # Apply Movement
 func _apply_movement(delta):
@@ -87,45 +81,3 @@ func _apply_movement(delta):
 		movement_velocity.y += -gravity * delta
 	else:
 		movement_velocity.y = vel_y
-
-# Apply Render Passes
-func _apply_render_passes():
-	
-	# Update
-	if (is_near_water()):
-		
-		# Water Transition Pass
-		water_tp_camera.visible = true
-		water_tp_rt.visible = true
-		water_tp_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
-		water_tp_viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
-		
-		_apply_water_transition_pass();
-	
-	# Skip
-	else:
-		
-		# Water Transition Pass
-		water_tp_camera.visible = false
-		water_tp_rt.visible = false
-		water_tp_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
-		water_tp_viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
-
-# Apply Water Transition Pass
-func _apply_water_transition_pass():
-	water_tp_viewport.size = camera.get_viewport().size
-	
-	water_tp_camera.fov = camera.fov
-	water_tp_camera.near = camera.near
-	water_tp_camera.far = water_tp_camera.near + 0.01
-	water_tp_camera.global_transform = camera.global_transform
-	
-	water_tp_rt.translation.z = -(camera.near + 0.001)
-	
-	var camera_position = camera.global_translation
-	var camera_direction_vector = -camera.global_transform.basis.z
-	
-	var water_pp_mat = water_tp_rt.get_active_material(0)
-	water_pp_mat.set_shader_param("camera_near", camera.near)
-	water_pp_mat.set_shader_param("camera_position", camera_position)
-	water_pp_mat.set_shader_param("camera_direction_vector", camera_direction_vector)

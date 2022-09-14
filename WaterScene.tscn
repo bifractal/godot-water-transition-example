@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Textures/Terrain/river_small_rocks_diff_2k.jpg" type="Texture" id=1]
 [ext_resource path="res://Textures/Terrain/river_small_rocks_rough_2k.jpg" type="Texture" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://Textures/HDRI/T_SkyOnlyHDRI015.exr" type="Texture" id=4]
 [ext_resource path="res://Materials/M_OceanWater.tres" type="Material" id=5]
 [ext_resource path="res://Textures/Terrain/river_small_rocks_nor_gl_2k.jpg" type="Texture" id=6]
-[ext_resource path="res://FX/PostProcessingOverlay.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Controllable/Player.tscn" type="PackedScene" id=8]
 
 [sub_resource type="PanoramaSky" id=1]
@@ -91,6 +90,3 @@ mesh = SubResource( 6 )
 [node name="CollisionShape" type="CollisionShape" parent="FakeTerrain/StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 shape = SubResource( 7 )
-
-[node name="PostProcessingOverlay" parent="." instance=ExtResource( 7 )]
-player_path = NodePath("../Player")

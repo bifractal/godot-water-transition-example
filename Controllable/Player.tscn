@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Controllable/Player.gd" type="Script" id=1]
-[ext_resource path="res://Materials/M_PostProcess_WaterTransitionPass.tres" type="Material" id=2]
+[ext_resource path="res://addons/bifractal-water-transition-shader/WaterTransitionShader.tscn" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.75
@@ -18,9 +18,6 @@ emission = Color( 0.105882, 0.360784, 0.145098, 1 )
 emission_energy = 1.0
 emission_operator = 0
 emission_on_uv2 = false
-
-[sub_resource type="QuadMesh" id=4]
-size = Vector2( 1.92, 1.08 )
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 1 )
@@ -41,23 +38,4 @@ cast_shadow = 0
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 
-[node name="WaterTransitionPass_Viewport" type="Viewport" parent="."]
-size = Vector2( 1280, 720 )
-render_target_clear_mode = 2
-render_target_update_mode = 3
-gui_disable_input = true
-
-[node name="WaterTransitionPass_Camera" type="Camera" parent="WaterTransitionPass_Viewport"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-cull_mask = 32768
-near = 0.35
-far = 1.0
-
-[node name="WaterTransitionPass_RT" type="MeshInstance" parent="WaterTransitionPass_Viewport/WaterTransitionPass_Camera"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.351 )
-layers = 32768
-cast_shadow = 0
-generate_lightmap = false
-mesh = SubResource( 4 )
-skeleton = NodePath("../../../Camera")
-material/0 = ExtResource( 2 )
+[node name="WaterTransitionShader" parent="." instance=ExtResource( 2 )]

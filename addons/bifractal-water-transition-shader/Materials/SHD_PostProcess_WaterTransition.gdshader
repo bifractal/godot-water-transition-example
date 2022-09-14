@@ -5,13 +5,12 @@ shader_type canvas_item;
 
 uniform vec4 water_line_color : hint_color = vec4(0.1f, 0.25f, 0.4f, 1.0f);
 uniform vec4 underwater_color : hint_color = vec4(0.0f, 0.25f, 0.25f, 1.0f);
-uniform float underwater_blur_lod : hint_range(0.0f, 5.0f, 1.0f) = 3.0f;
+uniform float underwater_blur_lod : hint_range(0.0f, 5.0f, 1.0f) = 2.0f;
 
 uniform sampler2D underwater_refraction_noise;
 
 // Masks
 uniform sampler2D water_transition_mask;
-//uniform sampler2D water_depth_mask;
 
 /**
  * Generate Water Line
@@ -47,8 +46,6 @@ void fragment()
 	float water_transition_value = textureLod(water_transition_mask, SCREEN_UV, 0.0f).r;
 	float water_surface_mask = ceil(water_transition_value);
 
-	// TODO Underwater depth mask.
-	
 	// --> Water Line
 	float water_line_thickness = 0.24f;
 	

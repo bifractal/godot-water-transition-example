@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
-[ext_resource path="res://Materials/SHD_OceanWater.gdshader" type="Shader" id=1]
+[ext_resource path="res://addons/bifractal-water-transition-shader/materials/SHD_OceanWater.gdshader" type="Shader" id=1]
 
 [sub_resource type="OpenSimplexNoise" id=6]
 octaves = 6
