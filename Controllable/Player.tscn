@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Controllable/Player.gd" type="Script" id=1]
-[ext_resource path="res://addons/bifractal-water-transition-shader/WaterTransitionShader.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/bifractal-water-transition-shader/WaterTransitionShader.gd" type="Script" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.75
@@ -38,4 +38,5 @@ cast_shadow = 0
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 
-[node name="WaterTransitionShader" parent="." instance=ExtResource( 2 )]
+[node name="WaterTransitionShader" type="Spatial" parent="."]
+script = ExtResource( 2 )

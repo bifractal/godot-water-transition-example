@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "WaterTransitionShader",
+"language": "GDScript",
+"path": "res://addons/bifractal-water-transition-shader/WaterTransitionShader.gd"
+} ]
+_global_script_class_icons={
+"WaterTransitionShader": ""
+}
+
 [application]
 
 config/name="Water Transition Example"
