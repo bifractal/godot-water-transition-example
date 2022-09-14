@@ -10,6 +10,7 @@ onready var render_mesh : MeshInstance	= $Viewport/Camera/RenderMesh
 onready var overlay		: Panel			= $PostProcessOverlay
 
 # General Settings
+export var cull_mask_bit				: int = 15
 export var water_level					: float = 0.0
 export var water_level_cam_threshold	: float = 1.0
 
@@ -26,12 +27,23 @@ var _skip			: bool		= true
 func _ready():
 	hide();
 	overlay.hide()
+	
+	camera.cull_mask = 0
+	camera.set_cull_mask_bit(cull_mask_bit, true)
+	
+	render_mesh.layers = 0
+	render_mesh.set_layer_mask_bit(cull_mask_bit, true)
 
 # Process
 func _process(_delta):
+	
+	# Use the "global" camera.
+	_main_camera = get_viewport().get_camera()
+	
 	if (_main_camera == null):
 		return
 	
+	_main_camera.set_cull_mask_bit(cull_mask_bit, false)
 	_skip = _main_camera.global_translation.y - water_level >= water_level_cam_threshold
 	
 	_apply_render_pass()
@@ -51,10 +63,6 @@ func _process(_delta):
 	
 	hide();
 	overlay.hide()
-
-# Update Main Camera
-func update_main_camera(main_camera: Camera):
-	_main_camera = main_camera
 
 # Apply Render Pass
 func _apply_render_pass():

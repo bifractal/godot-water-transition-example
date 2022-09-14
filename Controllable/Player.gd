@@ -3,8 +3,7 @@
 
 extends KinematicBody
 
-onready var camera					: Camera	= $Camera
-onready var water_transition_shader : Spatial	= $WaterTransitionShader
+onready var camera : Camera	= $Camera
 
 export var water_level					= 0.0
 export var water_level_cam_threshold	= 1.0
@@ -37,17 +36,9 @@ func _input(event):
 		cam_rot.x = clamp(cam_rot.x, -90.0, 90.0);
 		camera.set_rotation_degrees(cam_rot);
 
-# Process
-func _process(delta):
-	water_transition_shader.update_main_camera(camera)
-
 # Physics Process
 func _physics_process(delta):
 	_apply_movement(delta)
-
-# Is Near Water?
-func is_near_water():
-	return global_translation.y < water_level + water_level_cam_threshold
 
 # Apply Movement
 func _apply_movement(delta):
