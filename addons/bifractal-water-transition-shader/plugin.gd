@@ -4,9 +4,9 @@
 tool
 extends EditorPlugin
 
-const CUSTOM_TYPE_NAME = "WaterTransitionShader"
-const CUSTOM_TYPE_SCRIPT = preload("WaterTransitionShader.gd")
-const CUSTOM_TYPE_ICON = preload("Icons/icon.png")
+const CUSTOM_TYPE_NAME		= "WaterTransitionShader"
+const CUSTOM_TYPE_SCRIPT	= preload("WaterTransitionShader.gd")
+const CUSTOM_TYPE_ICON		= preload("Icons/icon.png")
 
 # Enter Tree
 func _enter_tree():

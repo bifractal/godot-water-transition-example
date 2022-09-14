@@ -3,22 +3,24 @@
 
 extends Spatial
 
-onready var viewport : Viewport = $Viewport
-onready var camera : Camera = $Viewport/Camera
-onready var render_mesh : MeshInstance = $Viewport/Camera/RenderMesh
-onready var overlay : Panel = $PostProcessOverlay
+# Nodes
+onready var viewport	: Viewport		= $Viewport
+onready var camera		: Camera		= $Viewport/Camera
+onready var render_mesh : MeshInstance	= $Viewport/Camera/RenderMesh
+onready var overlay		: Panel			= $PostProcessOverlay
 
 # General Settings
-export var water_level : float = 0.0
-export var water_level_cam_threshold : float = 1.0
+export var water_level					: float = 0.0
+export var water_level_cam_threshold	: float = 1.0
 
 # Shader Settings (Defaults from post-processing shader!)
-export var water_line_color : Color = Color("#1a4066")
-export var underwater_color : Color = Color("#004040")
-export var underwater_blur_lod : int = 2
+export var water_line_color		: Color = Color("#1a4066")
+export var underwater_color		: Color = Color("#004040")
+export var underwater_blur_lod	: int	= 2
 
-var _main_camera : Camera = null
-var _skip : bool = false
+# "Private"
+var _main_camera	: Camera	= null
+var _skip			: bool		= false
 
 # Process
 func _process(_delta):

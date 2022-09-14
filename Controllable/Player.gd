@@ -3,14 +3,14 @@
 
 extends KinematicBody
 
-onready var camera : Camera = $Camera
-onready var water_transition_shader : Spatial = $WaterTransitionShader
+onready var camera					: Camera	= $Camera
+onready var water_transition_shader : Spatial	= $WaterTransitionShader
 
-export var water_level = 0.0
-export var water_level_cam_threshold = 1.0
-export var mouse_sensitivity = 0.15
-export var walk_speed = 600.0
-export var gravity = 19.62
+export var water_level					= 0.0
+export var water_level_cam_threshold	= 1.0
+export var mouse_sensitivity			= 0.15
+export var walk_speed					= 600.0
+export var gravity						= 19.62
 
 var movement_velocity = Vector3(0.0, 0.0, 0.0)
 
